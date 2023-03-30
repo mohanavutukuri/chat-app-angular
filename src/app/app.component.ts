@@ -9,19 +9,30 @@ import { ChatService } from './chat.service';
 export class AppComponent {
   title = 'chat-application';
 
-  newMessage = '';
+  currId={} as {id:number,enable:boolean};
+  newMessage={} as {fromId:number,toId:number,message:string};
   messageList: string[] = [];
 
   constructor(private chatService: ChatService){}
 
   ngOnInit(){
-    this.chatService.getNewMessage().subscribe((message: string) => {
-      this.messageList.push(message);
+    this.currId.enable=false;
+  }
+  registerUser(){
+    this.chatService.addToUsers(this.currId.id);
+    this.currId.enable=true;
+    this.newMessage.fromId=this.currId.id;
+    this.chatService.getNewMessage().subscribe((data:{fromId:number,message:string}) => {
+      if(data.message!=null && data.message!='')
+      this.messageList.push(data.message);
     })
   }
-
   sendMessage() {
+    // this.newMessage.toId=1;
+    if(this.newMessage.message)
     this.chatService.sendMessage(this.newMessage);
-    this.newMessage = '';
+    this.newMessage.message='';
+    // this.newMessage = {} as {fromId:number,toId:number,message:string};
+    this.newMessage.fromId=this.currId.id;
   }
 }
