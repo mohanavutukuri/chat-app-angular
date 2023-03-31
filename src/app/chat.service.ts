@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { io } from "socket.io-client";
+import { message } from './app.component';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,7 @@ export class ChatService {
       age:20
     }
   ]
-  public message$: BehaviorSubject<{fromId:number,message:string}> = new BehaviorSubject({} as {fromId:number,message:string});
+  public message$: BehaviorSubject<message> = new BehaviorSubject({} as message);
   public user$: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
   // socket = io('https://node-api-1wbx.onrender.com');
   socket = io('http://localhost:3000');
@@ -39,13 +40,14 @@ export class ChatService {
     });
     return this.user$.asObservable();
   }
+
   public sendMessage(message: any) {
     console.log('sendMessage: ', message)
     this.socket.emit('message', message);
   }
 
   public getNewMessage = () => {
-    this.socket.on('message', (data:{fromId:number,message:string}) =>{
+    this.socket.on('message', (data:message) =>{
       this.message$.next(data);
     });
 

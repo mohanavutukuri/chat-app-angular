@@ -11,9 +11,9 @@
 <p (click)="setReceiver(user.id)" *ngFor="let user of UsersData">{{user.id}}:{{user.name}}</p>
 <br>
 <div *ngIf="currId.enable">
-  <div *ngFor="let message of messageList">
+  <div *ngFor="let msg of messageList">
     <li>
-        {{message}}
+        {{msg.fromId}}:{{msg.message}}
     </li>
   </div>
   <div *ngFor="let user of UsersData">
