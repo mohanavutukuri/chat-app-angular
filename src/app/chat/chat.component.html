@@ -1,0 +1,30 @@
+<br>
+<input
+  placeholder="enter User Id"
+  [(ngModel)]="currId.id"
+  (keyup)="$event.keyCode == 13 && registerUser()"
+
+  [disabled]="currId.enable"
+/>
+<br><br>
+<p>Available Users</p>
+<p (click)="setReceiver(user.id)" *ngFor="let user of UsersData">{{user.id}}:{{user.name}}</p>
+<br>
+<div *ngIf="currId.enable">
+  <div *ngFor="let msg of messageList">
+    <li>
+        {{msg.fromId}}:{{msg.message}}
+    </li>
+  </div>
+  <div *ngFor="let user of UsersData">
+    <p *ngIf="user.id==this.newMessage.toId">
+      To {{user.name}}
+    </p>
+  </div>
+  <input
+    [(ngModel)]="newMessage.message"
+    (keyup)="$event.keyCode == 13 && sendMessage()"
+  />
+  <button (click)="sendMessage()">Send Message</button>
+</div>
+

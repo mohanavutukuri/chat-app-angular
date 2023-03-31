@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { io } from "socket.io-client";
-import { message } from './app.component';
+import { message } from './chat/chat.component';
 
 @Injectable({
   providedIn: 'root'
