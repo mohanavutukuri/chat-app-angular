@@ -2,3 +2,98 @@ p{
     margin: 0px;
     cursor: pointer;
 }
+
+.chatContainer{
+    position: relative;
+    width: 20vw;
+    background-color: #6b6b6b4f;
+    height: 100vh;
+}
+
+.allMessages{
+    padding: 5%;
+    height: 87%;
+    color: white;
+    overflow: auto;
+}
+.allMessages::-webkit-scrollbar{
+    width: 5px;
+}
+.recieverAndMsgs{
+    padding: 0% 5%;
+    display: flex;
+    flex-direction: column;
+}
+
+.newMessageInput{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.newMessageInput > textarea{
+    padding: 3px 3px 0px 3px;
+    box-shadow: -4px 4px 4px rgba(255, 255, 255, 0.25);
+    outline: none;
+    resize: none;
+    width: 80%;
+    height: 25px;
+}
+
+.newMessageInput > button{
+    cursor: pointer;
+    border-radius: 50%;
+    border: none;
+    height: 35px;
+    width: 35px;
+    background: linear-gradient(45deg, transparent,red);
+}
+
+.newMessageInput > button > img{
+    height: 22px;
+}
+.commentUser{
+    display: flex;
+    gap: 5%;
+    margin-top: 10px;
+}
+.rowReverse{
+    flex-direction: row-reverse;
+
+    .userName{
+        text-align: end;
+    }
+
+    .messageContent{
+        text-align: end;
+    }
+}
+.commentUser > img{
+    border-radius: 50%;
+    height: 35px;
+    width: 35px;
+}
+
+.nameCircle{
+    height: 35px;
+    width: 35px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.letter{
+    margin: 0;
+    padding: 0;
+    color: white;
+    text-transform: capitalize;
+}
+
+.userName{
+    font-size: 12px;
+}
+
+.messageContent{
+    margin-top: 3px;
+}

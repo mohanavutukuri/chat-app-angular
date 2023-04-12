@@ -1,41 +1,25 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { io } from "socket.io-client";
-import { message } from './chat/chat.component';
+import { User, message } from './chat/chat.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
 
-  sampleUsers=[
-    {
-      id:1,
-      name:"mohan",
-      age:22
-    },
-    {
-      id:2,
-      name:"snehi",
-      age:21
-    },
-    {
-      id:3,
-      name:"geetha",
-      age:20
-    }
-  ]
+
   public message$: BehaviorSubject<message> = new BehaviorSubject({} as message);
-  public user$: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
+  public user$: BehaviorSubject<User[]> = new BehaviorSubject<User[]>([]);
   // socket = io('https://node-api-1wbx.onrender.com');
   socket = io('http://localhost:3000');
   constructor() { }
 
-  public addToUsers=(id:number)=>{
-    this.socket.emit('connection',id);
+  public addToUsers=(user:User)=>{
+    this.socket.emit('connection',user);
   }
   public getNewUsers=()=>{
-    this.socket.on('connection',(RevUsers:string[])=>{
+    this.socket.on('connection',(RevUsers:User[])=>{
       this.user$.next(RevUsers);
     });
     return this.user$.asObservable();
@@ -54,13 +38,4 @@ export class ChatService {
     return this.message$.asObservable();
   };
 
-  getById(id:any){
-    let user:any={}
-    this.sampleUsers.forEach(data=>{
-      if(data.id==id){
-        user=data;
-      }
-    })
-    return user;
-  }
 }

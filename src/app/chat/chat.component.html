@@ -1,30 +1,36 @@
-<br>
-<input
-  placeholder="enter User Id"
-  [(ngModel)]="currId.id"
-  (keyup)="$event.keyCode == 13 && registerUser()"
+<div class="chatContainer">
+  <div class="allMessages" id="allMessages">
+      <div class="commentUser" [ngClass]="{rowReverse:msg.fromId==currUser.id}" *ngFor="let msg of messageList">
+        <div class="nameCircle" [ngStyle]="{'background-color':colorslist[msg.fromName.toLowerCase().charCodeAt(0)-97] }">
+            <p class="letter">{{msg.fromName.substring(0, 1)}}</p>
+        </div>
+        <div class="nameAndMsg">
+          <div class="userName">
+            {{msg.fromName}}
+          </div>
+          <div class="messageContent">
+            {{msg.message}}
+          </div>
+        </div>
+      </div>
+  </div>
 
-  [disabled]="currId.enable"
-/>
-<br><br>
-<p>Available Users</p>
-<p (click)="setReceiver(user.id)" *ngFor="let user of UsersData">{{user.id}}:{{user.name}}</p>
-<br>
-<div *ngIf="currId.enable">
-  <div *ngFor="let msg of messageList">
-    <li>
-        {{msg.fromId}}:{{msg.message}}
-    </li>
+  <div class="recieverAndMsgs">
+    <!-- <div class="receiver">
+      To:
+      <select (change)="setReceiver($event)">
+        <option value=0>None</option>
+        <option *ngFor="let user of UsersData" [value]="user.id">{{user.name}}</option>
+      </select>
+    </div> -->
+    
+    <div class="newMessageInput" *ngIf="enable">
+      <textarea [(ngModel)]="newMessage.message" (keyup)="$event.keyCode == 13 && sendMessage()" ></textarea>
+      <button (click)="sendMessage()">
+        <img src="./assets/arrow.svg" />
+      </button>
+    </div>
+    
   </div>
-  <div *ngFor="let user of UsersData">
-    <p *ngIf="user.id==this.newMessage.toId">
-      To {{user.name}}
-    </p>
-  </div>
-  <input
-    [(ngModel)]="newMessage.message"
-    (keyup)="$event.keyCode == 13 && sendMessage()"
-  />
-  <button (click)="sendMessage()">Send Message</button>
+
 </div>
-
