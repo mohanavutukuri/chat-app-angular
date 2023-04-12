@@ -42,4 +42,12 @@ label{
 .chatcomponent{
     position: absolute;
     right: 0;
+    top:0;
+}
+
+@media only screen and (max-width: 500px) {
+    .chatcomponent{
+        position: relative;
+        right: 0;
+    }
 }

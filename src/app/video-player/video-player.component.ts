@@ -16,6 +16,7 @@ export class VideoPlayerComponent implements OnInit,OnChanges{
   @Input() file:any;
   URL = window.URL || window.webkitURL;
   srcUrl = ''
+  filename:string="";
   constructor(private service: SyncService) { }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -27,7 +28,7 @@ export class VideoPlayerComponent implements OnInit,OnChanges{
   
   changeSelected() {
       var urlBlob = this.URL.createObjectURL(this.file);
-
+      this.filename=this.file.name;
       document.getElementsByTagName('video')[0].src = urlBlob;
       document.getElementsByTagName('video')[0].load();
 

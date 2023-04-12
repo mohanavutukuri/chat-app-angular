@@ -75,8 +75,8 @@ p{
 }
 
 .nameCircle{
-    height: 35px;
-    width: 35px;
+    height: 38px;
+    width: 38px;
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -86,6 +86,8 @@ p{
 .letter{
     margin: 0;
     padding: 0;
+    width: 38px;
+    text-align: center;
     color: white;
     text-transform: capitalize;
 }
@@ -94,6 +96,29 @@ p{
     font-size: 12px;
 }
 
-.messageContent{
-    margin-top: 3px;
+// .messageContent{
+//     margin-top: 3px;
+// }
+
+@media only screen and (max-width: 500px) {
+    .chatContainer{
+        width: 90vw;
+        height: 65vh;
+        margin-top: 5%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .letter{
+        width: 45px;
+    }
+    .nameCircle{
+        height: 45px;
+        width: 45px;
+    }
+    .userName {
+        font-size: 16px;
+    }
+    .messageContent{
+        font-size: 18px;
+    }
 }
