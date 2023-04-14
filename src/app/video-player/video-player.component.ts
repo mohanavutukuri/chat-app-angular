@@ -44,11 +44,17 @@ export class VideoPlayerComponent implements OnInit,OnChanges{
         console.log(data);
         
         let video = document.getElementsByTagName('video')[0];
+        let playbutton=document.getElementsByClassName('play-button')[0];
+        let centerplaybutton=document.getElementsByClassName("play-pause")[0];
         video.currentTime=data.time;
         if (data.of == 0) {
-          document.getElementsByTagName('video')[0].pause();
+          playbutton.textContent='▶';
+          centerplaybutton.textContent='▶';
+          video.pause();
         } else {
-          document.getElementsByTagName('video')[0].play();
+          playbutton.textContent='| |'
+          centerplaybutton.textContent='| |'
+          video.play();
         }
       });
 
@@ -57,29 +63,27 @@ export class VideoPlayerComponent implements OnInit,OnChanges{
 
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent1(event: KeyboardEvent) {
-
-    let video = document.getElementsByTagName('video')[0];
-
     if (event.code == "ArrowRight") {
-      video.currentTime += 5;
-      let time = video.currentTime + 5;
-
-      this.service.sendNewTime(time);
-
+      this.skipForward();
     } else if (event.code == "ArrowLeft") {
-      video.currentTime -= 5;
-      let time = video.currentTime - 5;
-      this.service.sendNewTime(time);
-
-    } else if (event.code == "Space") {
-      this.toggle();
+      this.skipBackward();
     }
+  }
+  skipForward(){
+    let video = document.getElementsByTagName('video')[0];
+    let time = Math.floor(video.currentTime) + 5;
+    this.service.sendNewTime(time);
+  }
+  skipBackward(){
+    let video = document.getElementsByTagName('video')[0];
+    let time = Math.floor(video.currentTime) - 5;
+    this.service.sendNewTime(time);
   }
   toggle() {
 
     let video = document.getElementsByTagName('video')[0];
     let tgof={} as togglePlayTime;
-    tgof.time=video.currentTime;
+    tgof.time=Math.floor(video.currentTime);
     if (video.paused) {
       tgof.of=1;
       this.service.requestToggle(tgof);
@@ -92,11 +96,14 @@ export class VideoPlayerComponent implements OnInit,OnChanges{
   PlayPauseToggle(){
     let video=document.getElementsByTagName('video')[0];
     let playbutton=document.getElementsByClassName('play-button')[0];
+    let centerplaybutton=document.getElementsByClassName("play-pause")[0];
     if(video.paused){
       playbutton.textContent='| |'
+      centerplaybutton.textContent='| |'
       video.play();
     }else{
-      playbutton.textContent='▶'
+      playbutton.textContent='▶';
+      centerplaybutton.textContent='▶';
       video.pause();
     }
   }
@@ -104,7 +111,9 @@ export class VideoPlayerComponent implements OnInit,OnChanges{
   changeButton(){
     let video=document.getElementsByTagName('video')[0];
     let playbutton=document.getElementsByClassName('play-button')[0];
-    playbutton.textContent='▶'
+    let centerplaybutton=document.getElementsByClassName("play-pause")[0];
+    playbutton.textContent='▶';
+    centerplaybutton.textContent='▶';
   }
   videoVolumeChange(e:any){
     let video=document.getElementsByTagName('video')[0];
@@ -114,12 +123,12 @@ export class VideoPlayerComponent implements OnInit,OnChanges{
     let video=document.getElementsByTagName('video')[0];
     this.videoLength=Math.floor(video.duration);
     this.currPosition=Math.floor(video.currentTime);
-    let currentHours=Math.floor(video.currentTime/120);
-    let currentMinutes=Math.floor((video.currentTime-currentHours*60)/60);
-    let currentSeconds=Math.floor(video.currentTime-currentMinutes*60);
-    let durationHours=Math.floor(video.duration/120);
-    let durationMinutes=Math.floor((video.duration-durationHours*60)/60);
-    let durationSeconds=Math.floor(video.duration-durationMinutes*60);
+    let currentHours=Math.floor((video.currentTime/60)/60);
+    let currentMinutes=Math.floor((video.currentTime/60-currentHours*60));
+    let currentSeconds=Math.floor(video.currentTime-currentMinutes*60-currentHours*60*60);
+    let durationHours=Math.floor((video.duration/60)/60);
+    let durationMinutes=Math.floor((video.duration/60-durationHours*60));
+    let durationSeconds=Math.floor(video.duration-durationHours*60*60-durationMinutes*60);
     let val=(this.currPosition)/(this.videoLength)*100;
     document.getElementById('seeker')!.style.background='linear-gradient(to right, #ff5600 0%, #ff5600 ' + val + '%, #fff ' + val + '%, white 100%)';
     document.getElementsByClassName('current')[0].innerHTML=`${currentHours > 0 ? (currentHours < 10 ? '0'+currentHours+':':currentHours+':'):'' }${currentMinutes < 10 ? '0'+currentMinutes:currentMinutes}:${currentSeconds< 10 ? '0'+currentSeconds:currentSeconds}`;
@@ -127,6 +136,8 @@ export class VideoPlayerComponent implements OnInit,OnChanges{
   }
 
   MoveToSkip(e:any){
+    console.log(e.target.value);
+    
     let video=document.getElementsByTagName('video')[0];
     video.currentTime=e.target.value;
     let val=(video.currentTime)/(this.videoLength)*100;
@@ -146,17 +157,21 @@ export class VideoPlayerComponent implements OnInit,OnChanges{
     }
   }
   displayOptions(){
-    document.getElementById("video-controls")!.style.transform="translateY(-100%) translateY(-20%)";
+    document.getElementById("video-controls")!.style.transform="translateY(0%)";
+    (<HTMLDivElement>document.getElementsByClassName('skip-button')[0])!.style.display="flex";
     if(this.prevId){
       clearTimeout(this.prevId);
       this.prevId=0;
     }
-    const currId=setTimeout(() => {
-      this.hideOptions();
-    }, 4000);
-    this.prevId=currId;
+    if(document.fullscreenElement){
+      const currId=setTimeout(() => {
+        this.hideOptions();
+      }, 4000);
+      this.prevId=currId;
+    }
   }
   hideOptions(){
-    document.getElementById("video-controls")!.style.transform="translateY(0%) translateY(-20%)";
+    document.getElementById("video-controls")!.style.transform="translateY(100%) translateY(-20%)";
+    (<HTMLDivElement>document.getElementsByClassName('skip-button')[0])!.style.display="none";
   }
 }
